@@ -6,9 +6,6 @@ import pandas as pd
 import seaborn as sns
 from shiny import reactive, render, req
 
-# Using ui.a() to add a hyperlink to the sidebar
-ui.a("GitHub", href="https://github.com/Keyoungg2/cintel-02-data/tree/main", target="_blank")
-
 # Loading Palmer Penguins dataset
 penguins= palmerpenguins.load_penguins()
 
@@ -38,6 +35,9 @@ with ui.sidebar(open="open"):
 
 # Adding a horizontal rule to the sidebar
     ui.hr()
+
+# Using ui.a() to add a hyperlink to the sidebar
+ui.a("GitHub", href="https://github.com/Keyoungg2/cintel-02-data/tree/main", target="_blank")
 
 # Plot Charts for pegiuns data for body mass by island 
 with ui.layout_columns():
