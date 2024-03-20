@@ -37,7 +37,7 @@ with ui.sidebar(open="open"):
     ui.hr()
 
 # Using ui.a() to add a hyperlink to the sidebar
-ui.a("GitHub", href="https://github.com/Keyoungg2/cintel-02-data/tree/main", target="_blank")
+    ui.a("GitHub", href="https://github.com/Keyoungg2/cintel-02-data/tree/main", target="_blank")
 
 # Plot Charts for pegiuns data for body mass by island 
 with ui.layout_columns():
@@ -45,7 +45,7 @@ with ui.layout_columns():
     @render_plotly
     def plot_plt():
         return px.histogram(
-           penguins,
+            filtered_data(),
             x="body_mass_g",
             title="Penguin Mass Plotly    vs  Seaborn Species Count",
             labels={"body_mass_g": "Body Mass (g)", "count": "Count"})
@@ -53,21 +53,7 @@ with ui.layout_columns():
 #Plot Charts for pegiuns data for body mass by species  
     @render.plot
     def plot_sns():
-            return sns.histplot(penguins, x="species", kde=False)
-
-# Show Data
-with ui.layout_columns():
-    with ui.accordion(id="acc", open="closed"):
-        with ui.accordion_panel("Data Table"):
-            @render.data_frame
-            def penguins_datatable():
-                return render.DataTable(penguins)
-         
-        with ui.accordion_panel("Data Grid"):
-            @render.data_frame
-            def penguins_grid():
-                return render.DataGrid(penguins)
-
+            return sns.histplot(filtered_data(), x="species", kde=False)
 
 #Creating ui navigation panel of  plots to difference in plotly vs Seaborn 
 with ui.navset_card_tab(id="tab"):
@@ -75,7 +61,7 @@ with ui.navset_card_tab(id="tab"):
 
         @render.plot
         def seaborn_histogram():
-            seaborn_hist = sns.histplot(data=penguins,x=input.selected_attribute(),bins=input.seaborn_bin_count(),)
+            seaborn_hist = sns.histplot(filtered_data(),x=input.selected_attribute(),bins=input.seaborn_bin_count(),)
             seaborn_hist.set_title("Seaborn Penguin Data")
             seaborn_hist.set_xlabel("Selected Attribute")
             seaborn_hist.set_ylabel("Count")
@@ -88,11 +74,10 @@ with ui.navset_card_tab(id="tab"):
         def plotly_scatterplot():
         # Scatterplot for flipper and bill lengeth correlation 
             return px.scatter(
-                penguins,
+                filtered_data(),
                 x="flipper_length_mm",
                 y="bill_length_mm",
                 color="species",
-                facet_row="species",
                 facet_col="sex",
                 title="Flipper and Bill Lengeth Correlation Scatterplot",
                 labels={
@@ -107,12 +92,25 @@ with ui.navset_card_tab(id="tab"):
         @render_plotly
         def plotly_pie():
             pie_chart = px.pie(
-                penguins,
+                filtered_data(),
                 values="body_mass_g",
                 names="island",
                 title="Body mass on Islands",
             )
             return pie_chart
+# Show Data
+with ui.layout_columns():
+    with ui.accordion(id="acc", open="closed"):
+        with ui.accordion_panel("Data Table"):
+            @render.data_frame
+            def penguins_datatable():
+                return render.DataTable(penguins)
+         
+        with ui.accordion_panel("Data Grid"):
+            @render.data_frame
+            def penguins_grid():
+                return render.DataGrid(penguins)
+
 # --------------------------------------------------------
 # Reactive calculations and effects
 # --------------------------------------------------------
@@ -124,4 +122,3 @@ with ui.navset_card_tab(id="tab"):
 @reactive.calc
 def filtered_data():
     return penguins
-  
