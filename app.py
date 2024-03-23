@@ -37,7 +37,7 @@ with ui.sidebar(open="open"):
     ui.hr()
 
 # Using ui.a() to add a hyperlink to the sidebar
-    ui.a("GitHub", href="https://github.com/Keyoungg2/cintel-02-data/tree/main", target="_blank")
+    ui.a("K.Young GitHub", href="https://github.com/Keyoungg2/cintel-02-data/tree/main", target="_blank")
 
 # Plot Charts for pegiuns data for body mass by island 
 with ui.layout_columns():
@@ -119,6 +119,6 @@ with ui.layout_columns():
 # By decorating the function with @reactive, we can use the function to filter the data
 # The function will be called whenever an input functions used to generate that output changes.
 # Any output that depends on the reactive function (e.g., filtered_data()) will be updated when the data changes.
-@reactive.calc
-def filtered_data():
-    return penguins
+    @reactive.calc
+    def filtered_data():
+        return penguins[penguins["species"].isin(input.selected_species_list())]
